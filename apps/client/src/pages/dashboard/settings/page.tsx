@@ -3,6 +3,8 @@ import { ScrollArea, Separator } from "@reactive-resume/ui";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 
+import { getBrandName } from "@/client/libs/brand";
+
 import { AccountSettings } from "./_sections/account";
 import { DangerZoneSettings } from "./_sections/danger";
 import { OpenAISettings } from "./_sections/openai";
@@ -13,7 +15,7 @@ export const SettingsPage = () => (
   <>
     <Helmet>
       <title>
-        {t`Settings`} - {t`Reactive Resume`}
+        {t`Settings`} - {getBrandName()}
       </title>
     </Helmet>
 

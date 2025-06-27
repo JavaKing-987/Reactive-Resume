@@ -1,27 +1,26 @@
 import { t } from "@lingui/macro";
-import { Separator } from "@reactive-resume/ui";
 import { Link } from "react-router";
 
 import { Copyright } from "@/client/components/copyright";
+import { Icon } from "@/client/components/icon";
 import { LocaleSwitch } from "@/client/components/locale-switch";
-import { Logo } from "@/client/components/logo";
 import { ThemeSwitch } from "@/client/components/theme-switch";
+import { getBrandName } from "@/client/libs/brand";
 
 export const Footer = () => (
-  <footer className="bg-background">
-    <Separator />
+  <footer className="bg-background py-12">
+    <div className="container grid gap-8 lg:grid-cols-4">
+      <div className="flex flex-col space-y-4 lg:col-span-2">
+        <div className="flex items-center space-x-2">
+          <Icon size={24} />
+          <h2 className="text-xl font-medium">{getBrandName()}</h2>
+        </div>
 
-    <div className="container grid py-12 sm:grid-cols-3 lg:grid-cols-4">
-      <div className="flex flex-col gap-y-2">
-        <Logo size={96} className="-ml-2" />
-
-        <h2 className="text-xl font-medium">{t`Reactive Resume`}</h2>
-
-        <p className="prose prose-sm prose-zinc leading-relaxed opacity-60 dark:prose-invert">
-          {t`A free and open-source resume builder that simplifies the process of creating, updating, and sharing your resume.`}
+        <p className="leading-relaxed opacity-60">
+          {t`Create beautiful, professional resumes in minutes with our intuitive resume builder. Stand out from the crowd and land your dream job.`}
         </p>
 
-        <Copyright className="mt-6" />
+        <Copyright />
       </div>
 
       <div className="relative col-start-4 flex flex-col items-end justify-end">

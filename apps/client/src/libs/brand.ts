@@ -5,7 +5,7 @@ import { i18n } from "@lingui/core";
  * Returns the appropriate brand name based on current language setting
  */
 export function getBrandName(): string {
-  const locale = i18n.locale || 'zh-CN';
+  const locale = i18n.locale || "zh-CN";
   // eslint-disable-next-line lingui/no-unlocalized-strings
-  return locale.startsWith('zh') ? '王者简历' : 'King Resume';
-} 
+  return locale.startsWith("zh") ? "王者简历" : "King Resume";
+}

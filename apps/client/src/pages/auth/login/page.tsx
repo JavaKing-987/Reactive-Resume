@@ -23,6 +23,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import type { z } from "zod";
 
+import { getBrandName } from "@/client/libs/brand";
 import { useLogin } from "@/client/services/auth";
 import { useFeatureFlags } from "@/client/services/feature";
 
@@ -52,7 +53,7 @@ export const LoginPage = () => {
     <div className="space-y-8">
       <Helmet>
         <title>
-          {t`Sign in to your account`} - {t`Reactive Resume`}
+          {t`Sign in to your account`} - {getBrandName()}
         </title>
       </Helmet>
 

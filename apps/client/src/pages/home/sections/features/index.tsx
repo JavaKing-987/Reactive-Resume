@@ -28,6 +28,8 @@ import {
 import { cn, languages, templatesList } from "@reactive-resume/utils";
 import { motion } from "framer-motion";
 
+import { getBrandName } from "@/client/libs/brand";
+
 type Feature = {
   icon: React.ReactNode;
   title: string;
@@ -103,8 +105,8 @@ export const FeaturesSection = () => {
       <div className="container">
         <div className="space-y-6 leading-loose">
           <h2 className="text-4xl font-bold">{t`Rich in features, not in pricing.`}</h2>
-          <p className="max-w-4xl text-base leading-relaxed">
-            {t`Reactive Resume is a passion project of over 3 years of hard work, and with that comes a number of re-iterated ideas and features that have been built to (near) perfection.`}
+          <p className="mx-auto max-w-2xl text-lg leading-8 opacity-60">
+            {t`${getBrandName()} is designed with modern technology and user experience in mind, providing powerful features that make resume creation effortless and professional.`}
           </p>
 
           <IconContext.Provider value={{ size: 14, weight: "bold" }}>

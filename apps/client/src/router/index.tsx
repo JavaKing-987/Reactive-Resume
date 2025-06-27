@@ -18,15 +18,17 @@ import { HomePage } from "../pages/home/page";
 import { ErrorPage } from "../pages/public/error";
 import { publicLoader, PublicResumePage } from "../pages/public/page";
 import { Providers } from "../providers";
-import { AuthGuard } from "./guards/auth";
+import { AuthGuard, GuestAllowedGuard } from "./guards/auth";
 import { GuestGuard } from "./guards/guest";
 import { authLoader } from "./loaders/auth";
 
 export const routes = createRoutesFromElements(
   <Route element={<Providers />}>
     <Route errorElement={<ErrorPage />}>
+      <Route path="/" element={<Navigate replace to="/dashboard/resumes" />} />
+
       <Route element={<HomeLayout />}>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/home" element={<HomePage />} />
       </Route>
 
       <Route path="auth">
@@ -61,10 +63,12 @@ export const routes = createRoutesFromElements(
       </Route>
 
       <Route path="dashboard">
-        <Route element={<AuthGuard />}>
+        <Route element={<GuestAllowedGuard />}>
           <Route element={<DashboardLayout />}>
             <Route path="resumes" element={<ResumesPage />} />
-            <Route path="settings" element={<SettingsPage />} />
+            <Route element={<AuthGuard />}>
+              <Route path="settings" element={<SettingsPage />} />
+            </Route>
 
             <Route index element={<Navigate replace to="/dashboard/resumes" />} />
           </Route>
@@ -72,7 +76,7 @@ export const routes = createRoutesFromElements(
       </Route>
 
       <Route path="builder">
-        <Route element={<AuthGuard />}>
+        <Route element={<GuestAllowedGuard />}>
           <Route element={<BuilderLayout />}>
             <Route path=":id" loader={builderLoader} element={<BuilderPage />} />
 

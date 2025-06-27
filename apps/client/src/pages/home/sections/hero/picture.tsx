@@ -5,13 +5,13 @@ export const HeroPicture = () => (
     <div className="aspect-video overflow-hidden rounded-lg bg-background/5 shadow-2xl ring-1 ring-foreground/10">
       <img
         alt={t`王者简历平台界面预览`}
-        className="h-full w-full object-cover object-center"
+        className="size-full object-cover object-center"
         src="/screenshots/builder.jpg"
       />
     </div>
-    
+
     {/* Decorative elements */}
-    <div className="absolute -top-4 -right-4 h-12 w-12 rounded-full bg-primary/10 blur-sm" />
-    <div className="absolute -bottom-4 -left-4 h-8 w-8 rounded-full bg-accent/20 blur-sm" />
+    <div className="absolute -right-4 -top-4 size-12 rounded-full bg-primary/10 blur-sm" />
+    <div className="bg-accent/20 absolute -bottom-4 -left-4 size-8 rounded-full blur-sm" />
   </div>
-); 
+);

@@ -2,6 +2,8 @@ import { t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { Helmet } from "react-helmet-async";
 
+import { getBrandName } from "@/client/libs/brand";
+
 import { ContributorsSection } from "./sections/contributors";
 import { FAQSection } from "./sections/faq";
 import { FeaturesSection } from "./sections/features";
@@ -21,7 +23,7 @@ export const HomePage = () => {
         <html lang={i18n.locale} />
 
         <title>
-          {t`Reactive Resume`} - {t`A free and open-source resume builder`}
+          {getBrandName()} - {t`A professional resume builder`}
         </title>
 
         <meta

@@ -1,10 +1,10 @@
-import { t } from "@lingui/macro";
 import type { ResumeDto } from "@reactive-resume/dto";
 import { useCallback, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import type { LoaderFunction } from "react-router";
 import { redirect } from "react-router";
 
+import { getBrandName } from "@/client/libs/brand";
 import { queryClient } from "@/client/libs/query-client";
 import { findResumeById } from "@/client/services/resume";
 import { useBuilderStore } from "@/client/stores/builder";
@@ -55,9 +55,9 @@ export const BuilderPage = () => {
 
   return (
     <>
-      <Helmet>
+      <Helmet prioritizeSeoTags>
         <title>
-          {title} - {t`Reactive Resume`}
+          {title} - {getBrandName()}
         </title>
       </Helmet>
 

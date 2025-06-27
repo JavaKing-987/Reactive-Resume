@@ -1,12 +1,14 @@
 import { useTheme } from "@reactive-resume/hooks";
 import { cn } from "@reactive-resume/utils";
 
-type Props = {
+import { getBrandName } from "@/client/libs/brand";
+
+type LogoProps = {
   size?: number;
   className?: string;
 };
 
-export const Logo = ({ size = 32, className }: Props) => {
+export const Logo = ({ size = 32, className }: LogoProps) => {
   const { isDarkMode } = useTheme();
 
   let src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
@@ -27,7 +29,7 @@ export const Logo = ({ size = 32, className }: Props) => {
       src={src}
       width={size}
       height={size}
-      alt="Reactive Resume"
+      alt={getBrandName()}
       className={cn("rounded-sm", className)}
     />
   );

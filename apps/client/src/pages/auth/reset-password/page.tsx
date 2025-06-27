@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router";
 import type { z } from "zod";
 
+import { getBrandName } from "@/client/libs/brand";
 import { useResetPassword } from "@/client/services/auth";
 
 type FormValues = z.infer<typeof resetPasswordSchema>;
@@ -57,7 +58,7 @@ export const ResetPasswordPage = () => {
     <div className="space-y-8">
       <Helmet>
         <title>
-          {t`Reset your password`} - {t`Reactive Resume`}
+          {t`Reset your password`} - {getBrandName()}
         </title>
       </Helmet>
 

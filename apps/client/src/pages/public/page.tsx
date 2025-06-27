@@ -10,6 +10,7 @@ import { Link, redirect, useLoaderData } from "react-router";
 
 import { Icon } from "@/client/components/icon";
 import { ThemeSwitch } from "@/client/components/theme-switch";
+import { getBrandName } from "@/client/libs/brand";
 import { queryClient } from "@/client/libs/query-client";
 import { findResumeByUsernameSlug, usePrintResume } from "@/client/services/resume";
 
@@ -71,7 +72,7 @@ export const PublicResumePage = () => {
     <div>
       <Helmet>
         <title>
-          {title} - {t`Reactive Resume`}
+          {title} - {getBrandName()}
         </title>
       </Helmet>
 
@@ -92,7 +93,7 @@ export const PublicResumePage = () => {
           <Button size="sm" variant="ghost" className="space-x-1.5 text-xs font-normal">
             <span>{t`Built with`}</span>
             <Icon size={12} />
-            <span>{t`Reactive Resume`}</span>
+            <span>{getBrandName()}</span>
           </Button>
         </Link>
       </div>

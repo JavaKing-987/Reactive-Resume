@@ -23,6 +23,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import type { z } from "zod";
 
+import { getBrandName } from "@/client/libs/brand";
 import { useRegister } from "@/client/services/auth";
 import { useFeatureFlags } from "@/client/services/feature";
 
@@ -61,7 +62,7 @@ export const RegisterPage = () => {
     <div className="space-y-8">
       <Helmet>
         <title>
-          {t`Create a new account`} - {t`Reactive Resume`}
+          {t`Create a new account`} - {getBrandName()}
         </title>
       </Helmet>
 

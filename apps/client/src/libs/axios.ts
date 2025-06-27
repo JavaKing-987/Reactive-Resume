@@ -2,15 +2,9 @@ import { t } from "@lingui/macro";
 import type { ErrorMessage } from "@reactive-resume/utils";
 import { deepSearchAndParseDates } from "@reactive-resume/utils";
 import _axios from "axios";
-import createAuthRefreshInterceptor from "axios-auth-refresh";
-import { redirect } from "react-router";
 
-import { refreshToken } from "@/client/services/auth";
-
-import { USER_KEY } from "../constants/query-keys";
 import { toast } from "../hooks/use-toast";
 import { translateError } from "../services/errors/translate-error";
-import { queryClient } from "./query-client";
 
 export const axios = _axios.create({ baseURL: "/api", withCredentials: true });
 
@@ -21,6 +15,12 @@ axios.interceptors.response.use(
     return { ...response, data: transformedResponse };
   },
   (error) => {
+    // 如果是 401 错误，不显示错误提示，让上层代码处理
+    if (error.response?.status === 401) {
+      // 401 错误 - 用户未认证，正常情况，不需要记录
+      return Promise.reject(error);
+    }
+
     const message = error.response?.data.message as ErrorMessage;
     const description = translateError(message);
 
@@ -32,23 +32,19 @@ axios.interceptors.response.use(
       });
     }
 
-    return Promise.reject(new Error(message));
+    return Promise.reject(error);
   },
 );
 
-// Create another instance to handle failed refresh tokens
-// Reference: https://github.com/Flyrell/axios-auth-refresh/issues/191
-const axiosForRefresh = _axios.create({ baseURL: "/api", withCredentials: true });
+// 注释掉认证刷新拦截器，让服务层处理认证
+// import createAuthRefreshInterceptor from "axios-auth-refresh";
+// import { refreshToken } from "@/client/services/auth";
 
-// Interceptor to handle expired access token errors
-const handleAuthError = () => refreshToken(axiosForRefresh);
-
-// Interceptor to handle expired refresh token errors
-const handleRefreshError = async () => {
-  await queryClient.invalidateQueries({ queryKey: USER_KEY });
-  redirect("/auth/login");
-};
-
-// Intercept responses to check for 401 and 403 errors, refresh token and retry the request
-createAuthRefreshInterceptor(axios, handleAuthError, { statusCodes: [401, 403] });
-createAuthRefreshInterceptor(axiosForRefresh, handleRefreshError);
+// const axiosForRefresh = _axios.create({ baseURL: "/api", withCredentials: true });
+// const handleAuthError = async () => refreshToken(axiosForRefresh);
+// const handleRefreshError = async () => {
+//   await queryClient.invalidateQueries({ queryKey: ["user"] });
+//   redirect("/auth/login");
+// };
+// createAuthRefreshInterceptor(axios, handleAuthError, { statusCodes: [401, 403] });
+// createAuthRefreshInterceptor(axiosForRefresh, handleRefreshError);

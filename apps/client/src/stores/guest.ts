@@ -19,7 +19,7 @@ type GuestActions = {
 };
 
 // 创建默认的简历数据
-const createDefaultResume = (): Omit<ResumeDto, 'userId' | 'createdAt' | 'updatedAt'> => ({
+const createDefaultResume = (): Omit<ResumeDto, "userId" | "createdAt" | "updatedAt"> => ({
   id: createId(),
   title: t`我的简历`,
   slug: "my-resume",
@@ -212,7 +212,8 @@ export const useGuestStore = create<GuestState & GuestActions>()(
       updateGuestResume: (resume) => {
         set((state) => ({
           guestResumes: state.guestResumes.map((r) => (r.id === resume.id ? resume : r)),
-          currentGuestResume: state.currentGuestResume?.id === resume.id ? resume : state.currentGuestResume,
+          currentGuestResume:
+            state.currentGuestResume?.id === resume.id ? resume : state.currentGuestResume,
         }));
       },
 
@@ -237,10 +238,10 @@ export const useGuestStore = create<GuestState & GuestActions>()(
       syncToAccount: async (userId) => {
         // 这里将实现同步逻辑，将游客数据同步到用户账户
         const { guestResumes } = get();
-        
+
         // TODO: 实现API调用，将guestResumes同步到用户账户
         await Promise.resolve(); // 占位符，防止linter警告
-        
+
         // 同步完成后清除游客数据
         set({
           guestResumes: [],

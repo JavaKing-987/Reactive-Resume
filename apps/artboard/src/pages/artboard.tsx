@@ -5,6 +5,12 @@ import webfontloader from "webfontloader";
 
 import { useArtboardStore } from "../store/artboard";
 
+// 获取品牌名称函数
+const getBrandName = (): string => {
+  // 默认返回中文名称，因为是中国用户为主的平台
+  return "王者简历";
+};
+
 export const ArtboardPage = () => {
   const name = useArtboardStore((state) => state.resume.basics.name);
   const metadata = useArtboardStore((state) => state.resume.metadata);
@@ -60,7 +66,9 @@ export const ArtboardPage = () => {
   return (
     <>
       <Helmet>
-        <title>{name} | Reactive Resume</title>
+        <title>
+          {name} | {getBrandName()}
+        </title>
         {metadata.css.visible && (
           <style id="custom-css" lang="css">
             {metadata.css.value}
