@@ -1,15 +1,23 @@
 import { t } from "@lingui/macro";
+import { useLingui } from "@lingui/react";
 import { AspectRatio } from "@reactive-resume/ui";
-import { cn, templatesList } from "@reactive-resume/utils";
+import { cn, getFilteredTemplates, getTemplateDisplayName } from "@reactive-resume/utils";
 import { motion } from "framer-motion";
+import { useMemo } from "react";
 
 import { useResumeStore } from "@/client/stores/resume";
 
 import { SectionIcon } from "../shared/section-icon";
 
 export const TemplateSection = () => {
+  const { i18n } = useLingui();
   const setValue = useResumeStore((state) => state.setValue);
   const currentTemplate = useResumeStore((state) => state.resume.data.metadata.template);
+
+  // 根据语言过滤模板
+  const filteredTemplates = useMemo(() => {
+    return getFilteredTemplates(i18n.locale);
+  }, [i18n.locale]);
 
   return (
     <section id="template" className="grid gap-y-6">
@@ -21,30 +29,34 @@ export const TemplateSection = () => {
       </header>
 
       <main className="grid grid-cols-2 gap-8 @lg/right:grid-cols-3 @2xl/right:grid-cols-4">
-        {templatesList.map((template, index) => (
-          <AspectRatio key={template} ratio={1 / 1.4142}>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { delay: index * 0.1 } }}
-              whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
-              className={cn(
-                "relative cursor-pointer rounded-sm ring-primary transition-all hover:ring-2",
-                currentTemplate === template && "ring-2",
-              )}
-              onClick={() => {
-                setValue("metadata.template", template);
-              }}
-            >
-              <img src={`/templates/jpg/${template}.jpg`} alt={template} className="rounded-sm" />
+        {filteredTemplates.map((template, index) => {
+          const displayName = getTemplateDisplayName(template, i18n.locale);
+          
+          return (
+            <AspectRatio key={template} ratio={1 / 1.4142}>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { delay: index * 0.1 } }}
+                whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
+                className={cn(
+                  "relative cursor-pointer rounded-sm ring-primary transition-all hover:ring-2",
+                  currentTemplate === template && "ring-2",
+                )}
+                onClick={() => {
+                  setValue("metadata.template", template);
+                }}
+              >
+                <img src={`/templates/jpg/${template}.jpg`} alt={template} className="rounded-sm" />
 
-              <div className="absolute inset-x-0 bottom-0 h-32 w-full bg-gradient-to-b from-transparent to-background/80">
-                <p className="absolute inset-x-0 bottom-2 text-center font-bold capitalize text-primary">
-                  {template}
-                </p>
-              </div>
-            </motion.div>
-          </AspectRatio>
-        ))}
+                <div className="absolute inset-x-0 bottom-0 h-32 w-full bg-gradient-to-b from-transparent to-background/80">
+                  <p className="absolute inset-x-0 bottom-2 text-center font-bold text-primary">
+                    {displayName}
+                  </p>
+                </div>
+              </motion.div>
+            </AspectRatio>
+          );
+        })}
       </main>
     </section>
   );

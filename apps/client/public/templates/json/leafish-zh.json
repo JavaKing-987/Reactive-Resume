@@ -1,0 +1,346 @@
+{
+  "basics": {
+    "name": "张三",
+    "headline": "Creative and Innovative 前端开发工程师",
+    "email": "zhangsan@gmail.com",
+    "phone": "(555) 123-4567",
+    "location": "上海市 200000",
+    "url": {
+      "label": "",
+      "href": "https://zhangsan.me/"
+    },
+    "customFields": [],
+    "picture": {
+      "url": "https://i.imgur.com/HgwyOuJ.jpg",
+      "size": 120,
+      "aspectRatio": 1,
+      "borderRadius": 0,
+      "effects": {
+        "hidden": false,
+        "border": false,
+        "grayscale": false
+      }
+    }
+  },
+  "sections": {
+    "summary": {
+      "name": "个人简介",
+      "columns": 1,
+      "visible": true,
+      "id": "summary",
+      "content": "<p>Innovative 前端开发工程师 拥有5年丰富经验 in 专注于构建有影响力且用户友好的网站和应用程序. Specializes in <strong>前端技术</strong> 并且热衷于 现代Web标准和前沿开发技术. 拥有从概念到部署领导成功项目的优秀记录.</p>"
+    },
+    "awards": {
+      "name": "奖项荣誉",
+      "columns": 1,
+      "visible": true,
+      "id": "awards",
+      "items": []
+    },
+    "certifications": {
+      "name": "资格认证",
+      "columns": 1,
+      "visible": true,
+      "id": "certifications",
+      "items": [
+        {
+          "id": "spdhh9rrqi1gvj0yqnbqunlo",
+          "visible": true,
+          "name": "全栈开发工程师认证",
+          "issuer": "代码学院",
+          "date": "2020",
+          "summary": "",
+          "url": {
+            "label": "",
+            "href": ""
+          }
+        },
+        {
+          "id": "n838rddyqv47zexn6cxauwqp",
+          "visible": true,
+          "name": "AWS认证开发人员",
+          "issuer": "亚马逊云服务",
+          "date": "2019",
+          "summary": "",
+          "url": {
+            "label": "",
+            "href": ""
+          }
+        }
+      ]
+    },
+    "education": {
+      "name": "教育背景",
+      "columns": 1,
+      "visible": true,
+      "id": "education",
+      "items": [
+        {
+          "id": "yo3p200zo45c6cdqc6a2vtt3",
+          "visible": true,
+          "institution": "北京理工大学",
+          "studyType": "计算机科学学士",
+          "area": "北京市",
+          "score": "",
+          "date": "2012年8月至2016年5月",
+          "summary": "",
+          "url": {
+            "label": "",
+            "href": ""
+          }
+        }
+      ]
+    },
+    "experience": {
+      "name": "工作经历",
+      "columns": 1,
+      "visible": true,
+      "id": "experience",
+      "items": [
+        {
+          "id": "lhw25d7gf32wgdfpsktf6e0x",
+          "visible": true,
+          "company": "创新解决方案有限公司",
+          "position": "高级前端开发工程师",
+          "location": "上海市",
+          "date": "2019年1月至今",
+          "summary": "<ul><li><p>主导主要产品网站的重新设计, 用户参与度提高了40%.</p></li><li><p>开发并实施了新的响应式框架, 提高了跨设备兼容性.</p></li><li><p>指导了四名初级开发人员团队, 培养了技术卓越的文化.</p></li></ul>",
+          "url": {
+            "label": "",
+            "href": "https://creativesolutions.inc/"
+          }
+        },
+        {
+          "id": "r6543lil53ntrxmvel53gbtm",
+          "visible": true,
+          "company": "技术先锋科技",
+          "position": "前端开发工程师",
+          "location": "深圳市",
+          "date": "2016年6月至2018年12月",
+          "summary": "<ul><li><p>与10人团队协作开发高质量Web应用程序 使用React.js和Node.js技术.</p></li><li><p>管理第三方服务集成 如Stripe支付和Twilio短信服务.</p></li><li><p>优化应用程序性能, 实现了30%的加载时间减少.</p></li></ul>",
+          "url": {
+            "label": "",
+            "href": "https://技术先锋科技.com/"
+          }
+        }
+      ]
+    },
+    "volunteer": {
+      "name": "志愿活动",
+      "columns": 1,
+      "visible": true,
+      "id": "volunteer",
+      "items": []
+    },
+    "interests": {
+      "name": "兴趣爱好",
+      "columns": 1,
+      "visible": true,
+      "id": "interests",
+      "items": []
+    },
+    "languages": {
+      "name": "语言能力",
+      "columns": 1,
+      "visible": true,
+      "id": "languages",
+      "items": []
+    },
+    "profiles": {
+      "name": "社交资料",
+      "columns": 1,
+      "visible": true,
+      "id": "profiles",
+      "items": [
+        {
+          "id": "cnbk5f0aeqvhx69ebk7hktwd",
+          "visible": true,
+          "network": "LinkedIn",
+          "username": "zhangsan",
+          "icon": "linkedin",
+          "url": {
+            "label": "",
+            "href": "https://linkedin.com/in/zhangsan"
+          }
+        },
+        {
+          "id": "ukl0uecvzkgm27mlye0wazlb",
+          "visible": true,
+          "network": "GitHub",
+          "username": "zhangsan",
+          "icon": "github",
+          "url": {
+            "label": "",
+            "href": "https://github.com/zhangsan"
+          }
+        }
+      ]
+    },
+    "projects": {
+      "name": "项目经历",
+      "columns": 1,
+      "visible": true,
+      "id": "projects",
+      "items": [
+        {
+          "id": "yw843emozcth8s1ubi1ubvlf",
+          "visible": true,
+          "name": "电商平台系统",
+          "description": "项目负责人",
+          "date": "",
+          "summary": "<p>主导开发全栈 电商平台系统, 销售转化率提高25%.</p>",
+          "keywords": [],
+          "url": {
+            "label": "",
+            "href": ""
+          }
+        },
+        {
+          "id": "ncxgdjjky54gh59iz2t1xi1v",
+          "visible": true,
+          "name": "交互式数据仪表板",
+          "description": "前端开发工程师",
+          "date": "",
+          "summary": "<p>为SaaS应用程序创建交互式分析仪表板, 为客户提供更好的数据可视化体验.</p>",
+          "keywords": [],
+          "url": {
+            "label": "",
+            "href": ""
+          }
+        }
+      ]
+    },
+    "publications": {
+      "name": "出版物",
+      "columns": 1,
+      "visible": true,
+      "id": "publications",
+      "items": []
+    },
+    "references": {
+      "name": "推荐信",
+      "columns": 1,
+      "visible": false,
+      "id": "推荐信",
+      "items": [
+        {
+          "id": "f2sv5z0cce6ztjl87yuk8fak",
+          "visible": true,
+          "name": "可根据要求提供",
+          "description": "",
+          "summary": "",
+          "url": {
+            "label": "",
+            "href": ""
+          }
+        }
+      ]
+    },
+    "skills": {
+      "name": "技能",
+      "columns": 1,
+      "visible": true,
+      "id": "skills",
+      "items": [
+        {
+          "id": "hn0keriukh6c0ojktl9gsgjm",
+          "visible": true,
+          "name": "Web技术",
+          "description": "高级",
+          "level": 0,
+          "keywords": [
+            "HTML5",
+            "JavaScript",
+            "PHP",
+            "Python"
+          ]
+        },
+        {
+          "id": "r8c3y47vykausqrgmzwg5pur",
+          "visible": true,
+          "name": "Web框架",
+          "description": "中级",
+          "level": 0,
+          "keywords": [
+            "React.js",
+            "Angular",
+            "Vue.js",
+            "Laravel",
+            "Django"
+          ]
+        },
+        {
+          "id": "b5l75aseexqv17quvqgh73fe",
+          "visible": true,
+          "name": "开发工具",
+          "description": "中级",
+          "level": 0,
+          "keywords": [
+            "Webpack",
+            "Git",
+            "Jenkins",
+            "Docker",
+            "JIRA"
+          ]
+        }
+      ]
+    },
+    "custom": {}
+  },
+  "metadata": {
+    "template": "leafish",
+    "layout": [
+      [
+        [
+          "summary",
+          "experience",
+          "education",
+          "推荐信"
+        ],
+        [
+          "profiles",
+          "skills",
+          "certifications",
+          "interests",
+          "languages",
+          "projects",
+          "awards",
+          "volunteer",
+          "publications"
+        ]
+      ]
+    ],
+    "css": {
+      "value": "* {\n\toutline: 1px solid #000;\n\toutline-offset: 4px;\n}",
+      "visible": false
+    },
+    "page": {
+      "margin": 14,
+      "format": "a4",
+      "options": {
+        "breakLine": true,
+        "pageNumbers": true
+      }
+    },
+    "theme": {
+      "background": "#ffffff",
+      "text": "#000000",
+      "primary": "#7b4f1a"
+    },
+    "typography": {
+      "font": {
+        "family": "IBM Plex Serif",
+        "subset": "latin",
+        "variants": [
+          "regular"
+        ],
+        "size": 13
+      },
+      "lineHeight": 1.6,
+      "hideIcons": false,
+      "underlineLinks": true
+    },
+    "notes": ""
+  }
+}
+ 
