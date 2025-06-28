@@ -1,15 +1,22 @@
 import { t } from "@lingui/macro";
-import { HouseSimple, Lock, SidebarSimple } from "@phosphor-icons/react";
+import { CircleNotch, FilePdf, HouseSimple, Lock, SidebarSimple } from "@phosphor-icons/react";
 import { Button, Tooltip } from "@reactive-resume/ui";
 import { cn } from "@reactive-resume/utils";
 import { Link } from "react-router";
 
+import { usePrintResume } from "@/client/services/resume/print";
 import { useBuilderStore } from "@/client/stores/builder";
 import { useResumeStore } from "@/client/stores/resume";
+
+const openInNewTab = (url: string) => {
+  const win = window.open(url, "_blank");
+  if (win) win.focus();
+};
 
 export const BuilderHeader = () => {
   const title = useResumeStore((state) => state.resume.title);
   const locked = useResumeStore((state) => state.resume.locked);
+  const resumeId = useResumeStore((state) => state.resume.id);
 
   const toggle = useBuilderStore((state) => state.toggle);
   const isDragging = useBuilderStore(
@@ -18,8 +25,15 @@ export const BuilderHeader = () => {
   const leftPanelSize = useBuilderStore((state) => state.panel.left.size);
   const rightPanelSize = useBuilderStore((state) => state.panel.right.size);
 
+  const { printResume, loading } = usePrintResume();
+
   const onToggle = (side: "left" | "right") => {
     toggle(side);
+  };
+
+  const onPdfExport = async () => {
+    const { url } = await printResume({ id: resumeId });
+    openInNewTab(url);
   };
 
   return (
@@ -60,16 +74,31 @@ export const BuilderHeader = () => {
           )}
         </div>
 
-        <Button
-          size="icon"
-          variant="ghost"
-          className="flex lg:hidden"
-          onClick={() => {
-            onToggle("right");
-          }}
-        >
-          <SidebarSimple className="-scale-x-100" />
-        </Button>
+        <div className="flex items-center gap-x-2">
+          {/* PDF 导出按钮 */}
+          <Tooltip content={t`Export PDF`}>
+            <Button
+              size="icon"
+              variant="ghost"
+              disabled={loading}
+              onClick={onPdfExport}
+              className="hidden sm:flex"
+            >
+              {loading ? <CircleNotch size={18} className="animate-spin" /> : <FilePdf size={18} />}
+            </Button>
+          </Tooltip>
+
+          <Button
+            size="icon"
+            variant="ghost"
+            className="flex lg:hidden"
+            onClick={() => {
+              onToggle("right");
+            }}
+          >
+            <SidebarSimple className="-scale-x-100" />
+          </Button>
+        </div>
       </div>
     </div>
   );

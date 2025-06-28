@@ -4,19 +4,11 @@ import type { ResumeData } from "@reactive-resume/schema";
 import {
   AspectRatio,
   Badge,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Switch,
 } from "@reactive-resume/ui";
 import { cn, getFilteredTemplates, getTemplateDisplayName } from "@reactive-resume/utils";
 import { motion } from "framer-motion";
@@ -161,75 +153,42 @@ export const TemplateSection = () => {
   const currentTemplate = useResumeStore((state) => state.resume.data.metadata.template);
   const currentData = useResumeStore((state) => state.resume.data);
 
-  // 状态管理
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("all");
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [pendingTemplate, setPendingTemplate] = useState<string>("");
-  const [replaceContent, setReplaceContent] = useState(false);
+  // 状态管理 - 默认选择中文模板
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("zh");
 
   // 根据选择的语言过滤模板
   const filteredTemplates = useMemo(() => {
     const allTemplates = getFilteredTemplates(i18n.locale);
+    return allTemplates; // 显示所有模板，但根据语言选择加载不同内容
+  }, [i18n.locale]);
 
-    if (selectedLanguage === "all") {
-      return allTemplates;
-    } else if (selectedLanguage === "zh") {
-      return allTemplates; // 显示所有模板，用户选择中文时会加载中文内容
-    } else {
-      return allTemplates; // 显示所有模板，用户选择英文时会加载英文内容
-    }
-  }, [i18n.locale, selectedLanguage]);
-
-  // 检查是否有现有内容
-  const hasExistingContent = useMemo(() => {
-    return (
-      (currentData.basics?.name && currentData.basics.name.trim() !== "") ||
-      (currentData.sections?.experience?.items && currentData.sections.experience.items.length > 0) ||
-      (currentData.sections?.education?.items && currentData.sections.education.items.length > 0)
-    );
-  }, [currentData]);
-
-  // 处理模板选择
+  // 直接应用模板的核心逻辑 - 移除确认对话框
   const handleTemplateSelect = async (template: string) => {
     try {
-      // 如果有现有内容，显示确认对话框
-      if (hasExistingContent) {
-        setPendingTemplate(template);
-        setShowConfirmDialog(true);
-        return;
-      }
-
-      // 没有现有内容，直接应用
-      await applyTemplate(template, false);
-    } catch (error) {
-      console.error(`❌ 模板选择处理失败:`, error);
-    }
-  };
-
-  // 应用模板的核心逻辑
-  const applyTemplate = async (template: string, replace: boolean) => {
-    try {
       console.log(
-        `🎯 开始处理模板选择: ${template}, 当前语言: ${i18n.locale}, 选择语言: ${selectedLanguage}, 替换模式: ${replace}`,
+        `🎯 开始处理模板选择: ${template}, 当前语言: ${i18n.locale}, 选择语言: ${selectedLanguage}`,
       );
 
       // 首先更新模板样式
       setValue("metadata.template", template);
       console.log(`📋 已更新模板设置为: ${template}`);
 
-      // 决定使用哪种语言的模板数据
-      let targetLocale = selectedLanguage === "zh" ? "zh" : "en";
+      // 决定使用哪种语言的模板数据 - 强制使用选择的语言
+      let targetLocale = selectedLanguage;
       
-      // 如果用户选择了"all"，则根据系统语言决定
+      // 如果用户选择了"all"，优先使用中文
       if (selectedLanguage === "all") {
-        targetLocale = i18n.locale?.startsWith("zh") ? "zh" : "en";
+        targetLocale = "zh";
       }
 
-      // 加载模板数据并应用
+      console.log(`🌐 目标语言: ${targetLocale}`);
+
+      // 加载模板数据并应用 - 使用强制替换模式确保中文内容被应用
       const templateData = await loadTemplateData(template, targetLocale);
       if (templateData) {
-        console.log(`🔄 开始应用模板数据，替换模式: ${replace}...`);
-        applyTemplateData(setValue, currentData, templateData, replace);
+        console.log(`🔄 开始应用模板数据，强制替换模式...`);
+        // 强制替换内容以确保中文模板内容被正确应用
+        applyTemplateData(setValue, currentData, templateData, true);
         console.log(`🎉 模板 ${template} 应用完成！`);
       } else {
         console.warn(`⚠️ 无法加载模板数据: ${template}`);
@@ -239,219 +198,137 @@ export const TemplateSection = () => {
     }
   };
 
-  // 确认应用模板
-  const handleConfirmApply = async () => {
-    await applyTemplate(pendingTemplate, replaceContent);
-    setShowConfirmDialog(false);
-    setPendingTemplate("");
-    setReplaceContent(false);
-  };
-
-  // 取消应用
-  const handleCancelApply = () => {
-    setShowConfirmDialog(false);
-    setPendingTemplate("");
-    setReplaceContent(false);
-  };
-
   return (
-    <>
-      <section id="template" className="grid gap-y-6">
-        <header className="flex items-center justify-between">
-          <div className="flex items-center gap-x-4">
-            <SectionIcon id="template" size={18} name={i18n.locale?.startsWith("zh") ? "模板" : t`Template`} />
-            <h2 className="line-clamp-1 text-2xl font-bold lg:text-3xl">
-              {i18n.locale?.startsWith("zh") ? "模板" : t`Template`}
-            </h2>
-          </div>
-        </header>
-
-        {/* 语言过滤器 */}
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium">
-            {i18n.locale?.startsWith("zh") ? "模板语言" : t`Template Language`}
-          </label>
-          <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-            <SelectTrigger>
-              <SelectValue placeholder={i18n.locale?.startsWith("zh") ? "选择语言..." : t`Select language...`} />
-            </SelectTrigger>
-            <SelectContent>
-              {LANGUAGE_OPTIONS.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {getLanguageLabel(option, i18n.locale)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+    <section id="template" className="grid gap-y-6">
+      <header className="flex items-center justify-between">
+        <div className="flex items-center gap-x-4">
+          <SectionIcon id="template" size={18} name={i18n.locale?.startsWith("zh") ? "模板" : t`Template`} />
+          <h2 className="line-clamp-1 text-2xl font-bold lg:text-3xl">
+            {i18n.locale?.startsWith("zh") ? "模板" : t`Template`}
+          </h2>
         </div>
+      </header>
 
-        {/* 模板说明 */}
-        <div className="bg-muted/50 rounded-lg border border-border p-3">
-          <p className="text-muted-foreground text-sm">
-            {selectedLanguage === "zh" && (
-              <>
-                {i18n.locale?.startsWith("zh") 
-                  ? "点击任意模板应用中文内容和样式。如果您已有内容，系统会询问是否要替换现有内容。"
-                  : "Click any template to apply Chinese content and styling. If you have existing content, you'll be asked whether to replace it."
-                }
-              </>
-            )}
-            {selectedLanguage === "en" && (
-              <>
-                {i18n.locale?.startsWith("zh")
-                  ? "点击任意模板应用英文内容和样式。如果您已有内容，系统会询问是否要替换现有内容。"
-                  : "Click any template to apply English content and styling. If you have existing content, you'll be asked whether to replace it."
-                }
-              </>
-            )}
-            {selectedLanguage === "all" && (
-              <>
-                {i18n.locale?.startsWith("zh")
-                  ? "点击任意模板应用内容和样式。语言将基于您的系统设置。"
-                  : t`Click any template to apply content and styling. Language will be based on your system settings.`
-                }
-              </>
-            )}
-          </p>
-        </div>
+      {/* 语言过滤器 */}
+      <div className="flex flex-col gap-2">
+        <label className="text-sm font-medium">
+          {i18n.locale?.startsWith("zh") ? "模板语言" : t`Template Language`}
+        </label>
+        <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+          <SelectTrigger>
+            <SelectValue placeholder={i18n.locale?.startsWith("zh") ? "选择语言..." : t`Select language...`} />
+          </SelectTrigger>
+          <SelectContent>
+            {LANGUAGE_OPTIONS.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {getLanguageLabel(option, i18n.locale)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-        <main className="grid grid-cols-2 gap-8 @lg/right:grid-cols-3 @2xl/right:grid-cols-4">
-          {filteredTemplates.map((template, index) => {
-            const displayName = getTemplateDisplayName(template, i18n.locale);
-            
-            // 决定使用哪个预览图片
-            const getPreviewImage = () => {
-              if (selectedLanguage === "zh") {
-                // 尝试使用中文预览图，如果不存在则回退到英文
-                return `/templates/jpg/${template}-zh.jpg`;
-              }
-              return `/templates/jpg/${template}.jpg`;
-            };
-
-            return (
-              <AspectRatio key={template} ratio={1 / 1.4142}>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1, transition: { delay: index * 0.1 } }}
-                  whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
-                  className={cn(
-                    "relative cursor-pointer rounded-sm ring-primary transition-all hover:shadow-lg hover:ring-2",
-                    currentTemplate === template && "shadow-lg ring-2",
-                  )}
-                  onClick={() => handleTemplateSelect(template)}
-                >
-                  <img
-                    src={getPreviewImage()}
-                    alt={template}
-                    className="size-full rounded-sm object-cover"
-                    onError={(e) => {
-                      // 如果中文预览图加载失败，回退到英文预览图
-                      const target = e.target as HTMLImageElement;
-                      if (target.src.includes('-zh.jpg')) {
-                        target.src = `/templates/jpg/${template}.jpg`;
-                      }
-                    }}
-                  />
-
-                  {/* 语言标识 */}
-                  <div className="absolute right-2 top-2">
-                    {selectedLanguage === "zh" && (
-                      <Badge variant="secondary" className="text-xs">
-                        {i18n.locale?.startsWith("zh") ? "中文" : "ZH"}
-                      </Badge>
-                    )}
-                    {selectedLanguage === "en" && (
-                      <Badge variant="secondary" className="text-xs">
-                        {i18n.locale?.startsWith("zh") ? "英文" : "EN"}
-                      </Badge>
-                    )}
-                  </div>
-
-                  {/* 当前选中标识 */}
-                  {currentTemplate === template && (
-                    <div className="absolute left-2 top-2">
-                      <Badge variant="primary" className="text-xs">
-                        ✓ {i18n.locale?.startsWith("zh") ? "当前" : t`Active`}
-                      </Badge>
-                    </div>
-                  )}
-
-                  <div className="absolute inset-x-0 bottom-0 h-32 w-full bg-gradient-to-b from-transparent to-background/80">
-                    <p className="absolute inset-x-0 bottom-2 px-2 text-center text-sm font-bold text-primary">
-                      {displayName}
-                    </p>
-                  </div>
-                </motion.div>
-              </AspectRatio>
-            );
-          })}
-        </main>
-      </section>
-
-      {/* 确认对话框 */}
-      <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              {i18n.locale?.startsWith("zh") ? "应用模板内容" : t`Apply Template Content`}
-            </DialogTitle>
-            <DialogDescription>
+      {/* 模板说明 */}
+      <div className="bg-muted/50 rounded-lg border border-border p-3">
+        <p className="text-muted-foreground text-sm">
+          {selectedLanguage === "zh" && (
+            <>
               {i18n.locale?.startsWith("zh") 
-                ? "您的简历中已有内容。您希望如何应用模板？"
-                : t`You have existing content in your resume. How would you like to apply the template?`
+                ? "点击任意模板直接应用中文内容和样式。"
+                : "Click any template to directly apply Chinese content and styling."
               }
-            </DialogDescription>
-          </DialogHeader>
+            </>
+          )}
+          {selectedLanguage === "en" && (
+            <>
+              {i18n.locale?.startsWith("zh")
+                ? "点击任意模板直接应用英文内容和样式。"
+                : "Click any template to directly apply English content and styling."
+              }
+            </>
+          )}
+          {selectedLanguage === "all" && (
+            <>
+              {i18n.locale?.startsWith("zh")
+                ? "点击任意模板直接应用内容和样式。默认使用中文内容。"
+                : "Click any template to directly apply content and styling. Chinese content will be used by default."
+              }
+            </>
+          )}
+        </p>
+      </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="replace-content"
-                checked={replaceContent}
-                onCheckedChange={setReplaceContent}
-              />
-              <label htmlFor="replace-content" className="text-sm">
-                {replaceContent ? (
-                  <>
-                    <strong>
-                      {i18n.locale?.startsWith("zh") ? "替换现有内容" : t`Replace existing content`}
-                    </strong>
-                    <br />
-                    <span className="text-muted-foreground text-xs">
-                      {i18n.locale?.startsWith("zh")
-                        ? "所有当前内容将被模板内容替换。"
-                        : t`All your current content will be replaced with template content.`
-                      }
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <strong>
-                      {i18n.locale?.startsWith("zh") ? "只填充空字段" : t`Fill empty fields only`}
-                    </strong>
-                    <br />
-                    <span className="text-muted-foreground text-xs">
-                      {i18n.locale?.startsWith("zh")
-                        ? "模板内容只会添加到空字段中。"
-                        : t`Template content will only be added to empty fields.`
-                      }
-                    </span>
-                  </>
+      <main className="grid grid-cols-2 gap-8 @lg/right:grid-cols-3 @2xl/right:grid-cols-4">
+        {filteredTemplates.map((template, index) => {
+          const displayName = getTemplateDisplayName(template, i18n.locale);
+          
+          // 决定使用哪个预览图片
+          const getPreviewImage = () => {
+            if (selectedLanguage === "zh") {
+              // 尝试使用中文预览图，如果不存在则回退到英文
+              return `/templates/jpg/${template}-zh.jpg`;
+            }
+            return `/templates/jpg/${template}.jpg`;
+          };
+
+          return (
+            <AspectRatio key={template} ratio={1 / 1.4142}>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { delay: index * 0.1 } }}
+                whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
+                className={cn(
+                  "relative cursor-pointer rounded-sm ring-primary transition-all hover:shadow-lg hover:ring-2",
+                  currentTemplate === template && "shadow-lg ring-2",
                 )}
-              </label>
-            </div>
-          </div>
+                onClick={() => handleTemplateSelect(template)}
+              >
+                <img
+                  src={getPreviewImage()}
+                  alt={template}
+                  className="size-full rounded-sm object-cover"
+                  onError={(e) => {
+                    // 如果中文预览图加载失败，回退到英文预览图
+                    const target = e.target as HTMLImageElement;
+                    if (target.src.includes('-zh.jpg')) {
+                      target.src = `/templates/jpg/${template}.jpg`;
+                    }
+                  }}
+                />
 
-          <DialogFooter>
-            <Button variant="outline" onClick={handleCancelApply}>
-              {i18n.locale?.startsWith("zh") ? "取消" : t`Cancel`}
-            </Button>
-            <Button onClick={handleConfirmApply}>
-              {i18n.locale?.startsWith("zh") ? "应用模板" : t`Apply Template`}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+                {/* 语言标识 */}
+                <div className="absolute right-2 top-2">
+                  {selectedLanguage === "zh" && (
+                    <Badge variant="secondary" className="text-xs">
+                      {i18n.locale?.startsWith("zh") ? "中文" : "ZH"}
+                    </Badge>
+                  )}
+                  {selectedLanguage === "en" && (
+                    <Badge variant="secondary" className="text-xs">
+                      {i18n.locale?.startsWith("zh") ? "英文" : "EN"}
+                    </Badge>
+                  )}
+                </div>
+
+                {/* 当前选中标识 */}
+                {currentTemplate === template && (
+                  <div className="absolute left-2 top-2">
+                    <Badge variant="primary" className="text-xs">
+                      ✓ {i18n.locale?.startsWith("zh") ? "当前" : t`Active`}
+                    </Badge>
+                  </div>
+                )}
+
+                <div className="absolute inset-x-0 bottom-0 h-32 w-full bg-gradient-to-b from-transparent to-background/80">
+                  <p className="absolute inset-x-0 bottom-2 px-2 text-center text-sm font-bold text-primary">
+                    {displayName}
+                  </p>
+                </div>
+              </motion.div>
+            </AspectRatio>
+          );
+        })}
+      </main>
+    </section>
   );
 };
